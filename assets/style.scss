@@ -1,0 +1,146 @@
+
+/* SP: define our bs variables here */
+@import '~/assets/bs_config.scss';
+
+*{
+    font-family: 'Open Sans', sans-serif;
+}
+body{
+    background: url('/images/mountainbg.jpg') no-repeat fixed;
+    background-size:100vw auto;
+    background-position-y:bottom;
+    background-position-x: center;
+    overflow: hidden;
+}
+
+@media screen and (max-width: 768px) {
+    body{
+        background-size:cover;
+    }
+}
+
+
+// main content
+@keyframes fadeIn {
+    0% {opacity:0;}
+    100% {opacity:1;}
+  }
+$statbar-height: 120px;
+#main-content{
+    height: calc(100vh - $statbar-height);
+    animation: fadeIn 3.2s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+// SP Quiz main
+#quizMain{
+    animation: fadeInUp .5s cubic-bezier(0.75, 0.42, 0.165, 0.85);
+}
+
+// SP: bottom bar, progress bar, etc 
+@keyframes fadeInUp {
+    0% {opacity:0; transform:translateY(40vh);}
+    100% {opacity:1; transform:translateY(0vh);}
+  }
+$progressbar-height:30px;
+#statbar{
+    // position: fixed;
+    margin-top: $progressbar-height;
+    height: $statbar-height;
+    background-color: rgb(64, 160, 93);
+    z-index: 100;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    animation: fadeInUp .6s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+#statbar .progress{
+    height: $progressbar-height;
+    margin-top: -$progressbar-height;
+    background: rgba(0,0,0,0.2);
+}
+
+#statbar .progress-bar{
+    background-color: rgb(114, 211, 143);
+    transition: width 0.25s ease-in-out;
+}
+#statbar .progress-bar:hover{
+    background-color: rgb(114, 211, 143);
+}
+#starbar .progress-bar[aria-valuenow='100']{
+    background-color: rgb(17, 95, 41);
+}
+#progressCircle{
+    height: 80px;
+    width: 80px;
+    // background-color: rgb(9, 49, 21);
+}
+
+// SP: form elements
+.form-check-input:checked{
+    background-color: $success;
+}
+.form-check-input + .form-check-label{
+    
+    padding: 0px 25px;
+    font-size: 1.25rem;
+    cursor: pointer;
+}
+.form-check-input:checked + .form-check-label {
+    font-weight: bold;
+    color: $success;
+  }
+
+button.btn{
+    border-radius: 0;
+    line-height: 1.15;
+}
+
+// SP: header
+$header-height:95px;
+header#eco-quiz-header{
+    margin-bottom:-$header-height;
+    height:$header-height;
+}
+
+.logo{
+   
+    z-index: 100;
+    width:380px;
+  }
+
+//   SP: optional debugging
+  pre.debug{
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 320px;
+    max-width:500px;
+    background-color: rgb(64, 160, 93);
+    z-index: 10;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding: 10px;
+    font-size: 0.8rem;
+    color: white;
+    font-family: monospace;
+  }
+
+  i.debug{
+      position: fixed;
+      top:20px;
+      right:20px;
+      z-index: 100;
+  }
+
+
+//  SP: Results 
+#resultsContainer{
+    max-height: 100vh;
+    overflow-y: auto;
+    padding: 10%;
+
+}
+#resultsContainer > .row{
+    // max-height:  min(80vh,800px);
+    // overflow-y: auto;
+}
