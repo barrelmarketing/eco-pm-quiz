@@ -16,6 +16,7 @@ body{
 @media screen and (max-width: 768px) {
     body{
         background-size:cover;
+        overflow: hidden !important;
     }
 }
 
@@ -25,9 +26,26 @@ body{
     0% {opacity:0;}
     100% {opacity:1;}
   }
+
+
+  
+// SP: header
+$header-height:95px;
+header#eco-quiz-header{
+    // margin-bottom:-$header-height;
+    height:$header-height;
+}
+
+.logo{
+   
+    z-index: 100;
+    width:380px;
+  }
+
 $statbar-height: 120px;
 #main-content{
-    height: calc(100vh - $statbar-height);
+    height: calc(100vh - $statbar-height - $header-height);
+    // margin-top: $header-height;
     animation: fadeIn 3.2s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
@@ -93,19 +111,6 @@ button.btn{
     border-radius: 0;
     line-height: 1.15;
 }
-
-// SP: header
-$header-height:95px;
-header#eco-quiz-header{
-    margin-bottom:-$header-height;
-    height:$header-height;
-}
-
-.logo{
-   
-    z-index: 100;
-    width:380px;
-  }
 
 //   SP: optional debugging
   pre.debug{

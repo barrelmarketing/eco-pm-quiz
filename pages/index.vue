@@ -14,7 +14,7 @@
     </header>
     <section
       id="main-content"
-      class="container d-flex flex-column justify-content-center"
+      class="container d-flex flex-column justify-content-center px-4"
       v-if="finishedQuiz == false"
     >
       <!-- SP: INTRO -->
