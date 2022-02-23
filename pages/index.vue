@@ -77,7 +77,7 @@
             }}
           </h2>
 
-          <form :name="'answers_' + currentQuestion" class="mt-4">
+          <form :name="'answers_' + currentQuestion" class="mt-4 answers">
             <div
               v-for="(answer, index) in chosenQuestions[currentQuestion]
                 .answers"
@@ -104,16 +104,96 @@
         </div>
       </div>
     </section>
+    <section
+      id="user_info"
+      v-if="finishedQuiz == true && userInfo.submitted == false"
+      class="container d-flex flex-column justify-content-center p-5"
+    >
+      <div class="row">
+        <div class="col-xl-8 col-lg-9 mx-auto text-center">
+          <h2 class="fw-bold">Thank you for taking the quiz!</h2>
+          <p>
+            To complete the quiz and view your results, please fill in the
+            following fields:
+          </p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-8 col-lg-9 mx-auto">
+          <form
+            id="user_info_form"
+            name="user_info_form"
+            action=""
+            @submit.prevent="sendUserInfo()"
+          >
+            <div class="row">
+              <div class="col-lg-6">
+                <label class="form-label" for="first_name">First Name</label>
+                <input
+                  id="first_name"
+                  type="text"
+                  class="form-control"
+                  placeholder="First Name"
+                  name="user_info_form"
+                  v-model="userInfo.first_name"
+                />
+              </div>
+              <div class="col-lg-6">
+                <label class="form-label" for="last_name">Last Name</label>
+                <input
+                  id="last_name"
+                  type="text"
+                  class="form-control"
+                  placeholder="Last Name"
+                  name="user_info_form"
+                  v-model="userInfo.last_name"
+                />
+              </div>
+            </div>
+            <div class="row mt-4">
+              <div class="col-lg-6">
+                <label class="form-label" for="email">Email</label>
+                <input
+                  id="email"
+                  type="email"
+                  class="form-control"
+                  placeholder="Email"
+                  name="user_info_form"
+                  v-model="userInfo.email"
+                />
+              </div>
+              <div class="col-lg-6">
+                <label class="form-label" for="phone">Phone</label>
+                <input
+                  id="phone"
+                  type="text"
+                  class="form-control"
+                  placeholder="Phone"
+                  name="user_info_form"
+                  v-model="userInfo.phone"
+                />
+              </div>
+            </div>
+            <div class="row mt-4">
+              <div class="col-lg-6 mx-auto text-center">
+                <button class="btn btn-success btn-lg btn-block">Submit</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
     <!-- SP: QUIZ RESULTS -->
     <section
       class="overflow-auto container-fluid py-5"
-      v-if="finishedQuiz == true"
+      v-if="finishedQuiz == true && userInfo.submitted == true"
       id="resultsContainer"
     >
       <div class="row mt-5">
         <div class="col-xl-6 col-lg-9 mx-auto h-100 mt-5">
           <h3 class="w-100 text-center fw-bold">Your results:</h3>
           <br />
+
           <div class="mb-5 text-center">
             <span class="h1">{{ score + "/" + chosenQuestions.length }}</span>
             <div class="bg-light p-5 mt-5" v-if="score.length > 0">
@@ -126,12 +206,11 @@
               >
             </div>
           </div>
-          <hr />
         </div>
       </div>
       <!-- SP: REVIEW -->
       <div class="row">
-        <div class="col-xl-6 col-lg-9 mx-auto">
+        <div class="col-xl-6 col-lg-9 mx-auto p-5 bg-white">
           <div
             class="mt-5"
             v-for="(question, index) in chosenQuestions"
@@ -277,6 +356,13 @@ export default {
       finishedQuiz: false,
       score: [],
       debug: false,
+      userInfo: {
+        first_name: "",
+        last_name: "",
+        email: "",
+        phone: "",
+        submitted: false,
+      },
       alphabet: [
         "a",
         "b",
@@ -372,6 +458,177 @@ export default {
       );
       return chosenAns;
     },
+    sendUserInfo() {
+      var aoProtocol = location.protocol;
+      if (aoProtocol.indexOf("http") < 0) aoProtocol = "http:";
+      var aoCAP = {
+        aid: "42902",
+        fid: "6594f4ab-9a87-4a75-a869-3a2a324662e0",
+        did: "d-0001",
+        server: "info.eco.ca",
+        formName: "user_info_form",
+        protocol: aoProtocol,
+      };
+      var aoArr = aoArr || [];
+      aoArr.push(aoCAP);
+      function AoProcessForm(formelement) {
+        for (let AoI = 0; AoI < aoArr.length; AoI++) {
+          if (
+            aoArr[AoI].aid &&
+            aoArr[AoI].fid &&
+            aoArr[AoI].did &&
+            aoArr[AoI].server &&
+            (aoArr[AoI].formId || aoArr[AoI].formName)
+          ) {
+            var d = document,
+              thisFormId = formelement.id || "",
+              thisFormName = formelement.name || "",
+              bi = function (i) {
+                return d.getElementById(i);
+              },
+              bn = function (i) {
+                return d.getElementsByName(i)[0];
+              },
+              names = [],
+              values = [],
+              params = {},
+              w = window,
+              targetIdOrName = aoArr[AoI].formName
+                ? bn(aoArr[AoI].formName)
+                : bi(aoArr[AoI].formId),
+              len = targetIdOrName.elements.length,
+              isLoaded = false,
+              ud = "undefined",
+              st = function (f, i) {
+                w.setTimeout(f, i);
+              },
+              ce = function (t) {
+                return d.createElement(t);
+              },
+              gid = function (p) {
+                var j,
+                  i = 0,
+                  n = Math.random,
+                  r = [],
+                  c = "0123456789abcdef".split("");
+                for (; i < 16; i++) r[i] = c[(0 | (n() * 16)) & 0xf];
+                j = p + r.join("");
+                return bi(j) == null ? j : gid(p);
+              },
+              addInput = function (form, name, value) {
+                var el = ce("input");
+                el.name = name;
+                el.value = value;
+                form.appendChild(el);
+              },
+              idifr = gid("aoCapT");
+
+            if (
+              aoArr[AoI].formName == thisFormName ||
+              aoArr[AoI].formId == thisFormId
+            ) {
+              var dTarget = ce("div");
+              dTarget.style.display = "none";
+              d.body.appendChild(dTarget);
+              dTarget.innerHTML =
+                '<iframe name="' + idifr + '" id="' + idifr + '"></iframe>'; // generate iframe
+
+              var dForm = ce("form"),
+                idform = gid("aoCapD");
+              dForm.id = idform;
+              dForm.style.display = "none";
+              dForm.method = "POST";
+              dForm.enctype = "multipart/form-data";
+              dForm.acceptCharset = "UTF-8";
+              dForm.target = idifr; // form targets iframe
+              dForm.action =
+                (aoCAP.protocol || w.location.protocol) +
+                "//" +
+                aoCAP.server +
+                "/acton/forms/userSubmit.jsp";
+              d.body.appendChild(dForm); // generate form
+
+              for (i = 0; i < len; i++) {
+                var el = targetIdOrName.elements[i];
+                var name = typeof el.name != ud ? el.name : null;
+                var value = typeof el.value != ud ? el.value : null;
+                tagName = el.nodeName.toLowerCase();
+                if (
+                  tagName == "input" &&
+                  (el.type == "radio" || el.type == "checkbox") &&
+                  !el.checked
+                ) {
+                  name = null;
+                } else if (
+                  tagName == "select" &&
+                  el.selectedIndex &&
+                  el.selectedIndex != -1 &&
+                  el.options[el.selectedIndex] &&
+                  el.options[el.selectedIndex].value
+                ) {
+                  value = el.options[el.selectedIndex].value;
+                }
+                if (name != null && name != "") {
+                  names.push(name);
+                  values.push(el.value);
+                  console.log(
+                    "Element name: " + el.name + " / Element value: " + el.value
+                  );
+                  params[name] = el.value;
+                }
+                addInput(dForm, el.name, el.value);
+              }
+
+              aoCAP.pid = 0;
+              aoCAP.cuid = aoCAP.cuid || "";
+              aoCAP.srcid = aoCAP.srcid || "";
+              aoCAP.camp = aoCAP.camp || "";
+              addInput(dForm, "ao_a", aoArr[AoI].aid);
+              addInput(dForm, "ao_f", aoArr[AoI].fid);
+              addInput(dForm, "ao_d", aoArr[AoI].fid + ":" + aoArr[AoI].did);
+              addInput(dForm, "ao_p", 0);
+              addInput(dForm, "ao_jstzo", new Date().getTimezoneOffset());
+              addInput(dForm, "ao_form_neg_cap", "");
+              addInput(dForm, "ao_refurl", d.referrer);
+              addInput(dForm, "ao_cuid", aoCAP.cuid);
+              addInput(dForm, "ao_srcid", aoCAP.srcid);
+              addInput(dForm, "ao_camp", aoCAP.camp);
+              bi(idform).submit();
+
+              var dTargetFrame = bi(idifr);
+              dTargetFrame.onload = function () {
+                isLoaded = true;
+              };
+              var waitForSubmit = function () {
+                this.count = "";
+                if (!(isLoaded || dTargetFrame.readyState == "complete")) {
+                  st(waitForSubmit, 200);
+                  this.count++;
+                } else if (this.count > 7) {
+                  return true;
+                  console.log("skipping dForm");
+                } else {
+                  d.body.removeChild(dForm);
+                  d.body.removeChild(dTarget);
+                }
+              };
+              st(waitForSubmit, 100);
+            }
+          } else {
+            console.log("aoCAP property missing");
+          }
+        }
+      }
+
+      var url =
+        "https://info.eco.ca/acton/eform/42902/6594f4ab-9a87-4a75-a869-3a2a324662e0/d-ext-0001";
+      // this.$axios.post(url, this.userInfo).then(function (response) {
+      //   console.log(response);
+      // });
+      setTimeout(AoProcessForm(this.userInfo), 0);
+      this.userInfo.submitted = true;
+    },
+
     toggleDebug() {
       this.debug = !this.debug;
       console.log(this.debug);
