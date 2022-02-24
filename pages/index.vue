@@ -647,7 +647,7 @@ export default {
             body: form_data,
           }
         );
-        const content = await rawResponse.json();
+        const content = await rawResponse;
 
         // console.log(encodeURIComponent(content));
       })();
