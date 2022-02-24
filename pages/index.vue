@@ -188,24 +188,24 @@
 
           <div class="mb-5 text-center">
             <span class="h1">{{ score + "/" + chosenQuestions.length }}</span>
-            <div class="bg-light p-5 mt-5" v-if="score.length > 0">
+            <div class="bg-success text-light p-5 mt-5" v-if="score.length > 0">
               The Project Management Essentials course would be a great
-              opportunity to level up your skills. To learn more,
+              opportunity to level up your skills.
+              <a
+                role="button"
+                href="https://eco.ca/blog/eco-canada-launches-a-new-project-management-training-program-with-meridus-management-inc/"
+                class="btn btn-light rounded-0 py-2 mt-4"
+                >Click here to learn more</a
+              >
             </div>
-            <a
-              role="button"
-              href="https://eco.ca/blog/eco-canada-launches-a-new-project-management-training-program-with-meridus-management-inc/"
-              class="btn btn-success"
-              >click here to learn more</a
-            >
           </div>
         </div>
       </div>
       <!-- SP: REVIEW -->
       <div class="row">
-        <div class="col-xl-6 col-lg-9 mx-auto p-5 bg-white">
+        <div class="col-xl-6 col-lg-9 mx-auto px-5 bg-white">
           <div
-            class="mt-5"
+            class="mt-2 mb-5"
             v-for="(question, index) in chosenQuestions"
             :key="index"
           >
@@ -213,7 +213,7 @@
               {{ index + 1 }} )
               {{ question["question-text"].replaceAll("\\", "") }}
             </h4>
-            <h5 class="mt-4 ms-2">Correct answer:</h5>
+            <h5 class="mt-4 ms-5">Correct answer:</h5>
 
             <div
               class="text-success ms-5"
@@ -225,7 +225,7 @@
               }}
             </div>
 
-            <h5 class="mt-4 ms-2">You chose:</h5>
+            <h5 class="mt-4 ms-5">You chose:</h5>
             <div
               :class="'w-100 ms-5' + isCorrect(question)"
               v-for="(ans, ansID) in question.userAnswer"
@@ -243,12 +243,36 @@
       </div>
     </section>
 
+    <!--SP: LOADING -->
+    <section id="loadingWrapper" class="container-fluid" v-if="loading">
+      <svg
+        class="spinner"
+        width="65px"
+        height="65px"
+        viewBox="0 0 66 66"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle
+          class="path"
+          fill="none"
+          stroke-width="6"
+          stroke-linecap="round"
+          cx="33"
+          cy="33"
+          r="30"
+        ></circle>
+      </svg>
+    </section>
+
     <pre class="debug" v-if="debug">
       answer:{{ this.chosenQuestions[currentQuestion] }}
     </pre>
 
     <!-- SP: STAT BAR / FOOTER -->
-    <footer id="statbar" class="container-fluid" v-if="beginQuiz">
+    <footer
+      id="statbar"
+      :class="'container-fluid ' + (!beginQuiz ? 'hidden' : '')"
+    >
       <div class="progress row mb-auto">
         <div
           class="progress-bar"
@@ -356,6 +380,7 @@ export default {
         phone: "",
       },
       submitted: false,
+      loading: false,
       alphabet: [
         "a",
         "b",
@@ -467,19 +492,28 @@ export default {
         for (var key in item) {
           form_data.append(key, item[key]);
         }
-
-        const rawResponse = await fetch(
-          "https://info.eco.ca/acton/eform/42902/6594f4ab-9a87-4a75-a869-3a2a324662e0/d-ext-0001",
-          {
-            method: "POST",
-            headers: {
-              Accept: "multipart/form-data",
-            },
-            body: form_data,
-          }
-        );
-        vm.submitted = true;
-        // const content = await rawResponse;
+        if (window.location.href.includes("localhost")) {
+          this.loading = true;
+          setTimeout(function () {
+            vm.submitted = true;
+            vm.loading = false;
+          }, 2000);
+        } else {
+          this.loading = true;
+          const rawResponse = await fetch(
+            "https://info.eco.ca/acton/eform/42902/6594f4ab-9a87-4a75-a869-3a2a324662e0/d-ext-0001",
+            {
+              method: "POST",
+              headers: {
+                Accept: "multipart/form-data",
+              },
+              body: form_data,
+            }
+          );
+          vm.submitted = true;
+          this.loading = false;
+          // const content = await rawResponse;
+        }
       })();
     },
 

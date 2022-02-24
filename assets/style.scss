@@ -8,7 +8,7 @@
 body{
     background: url('/eco-pm-quiz/images/mountainbg.jpg') no-repeat fixed;
     background-size:100vw auto;
-    background-position-y:bottom;
+    background-position-y:50vh;
     background-position-x: center;
     overflow: hidden;
 }
@@ -59,6 +59,10 @@ $statbar-height: 120px;
     0% {opacity:0; transform:translateY(40vh);}
     100% {opacity:1; transform:translateY(0vh);}
   }
+  @keyframes fadeOut {
+    0% {opacity:1; transform:translateY(40vh);}
+    100% {opacity:0; transform:translateY(0vh);}
+  }
 $progressbar-height:30px;
 #statbar{
     // position: fixed;
@@ -68,6 +72,13 @@ $progressbar-height:30px;
     z-index: 100;
     box-shadow: 0 0 5px rgba(0,0,0,0.2);
     animation: fadeInUp .6s cubic-bezier(0.075, 0.82, 0.165, 1);
+    
+    
+}
+#statbar.hidden{
+    transition: opacity display .3s cubic-bezier(0.075, 0.82, 0.165, 1);
+    opacity: 0;
+    display: none;
 }
 
 #statbar .progress{
@@ -169,4 +180,57 @@ button.btn{
 }
 #user_info_form input{
     border-radius:0;
+}
+
+#loadingWrapper{
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(255,255,255,0.95);
+    top:0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+$offset: 187;
+$duration: 1.7s;
+
+.spinner {
+  animation: rotator $duration linear infinite;
+}
+
+@keyframes rotator {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(270deg); }
+}
+
+.path {
+  stroke-dasharray: $offset;
+  stroke-dashoffset: 0;
+  transform-origin: center;
+  animation:
+    dash $duration ease-in-out infinite, 
+    colors ($duration*4) ease-in-out infinite;
+}
+
+@keyframes colors {
+  0% { stroke: #0b7433; }
+  25% { stroke: #1c7928; }
+  50% { stroke: #177c30; }
+  75% { stroke: #1B9A59; }
+  100% { stroke: #2d8138; }
+}
+
+@keyframes dash {
+ 0% { stroke-dashoffset: $offset; }
+ 50% {
+   stroke-dashoffset: calc($offset / 4);
+   transform:rotate(135deg);
+ }
+ 100% {
+   stroke-dashoffset: $offset;
+   transform:rotate(450deg);
+ }
 }
