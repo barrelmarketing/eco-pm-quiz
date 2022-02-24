@@ -624,10 +624,34 @@ export default {
       var url =
         "https://info.eco.ca/acton/eform/42902/6594f4ab-9a87-4a75-a869-3a2a324662e0/d-ext-0001";
 
-      this.$axios.post(url, this.userInfo).then(function (response) {
-        console.log(response);
-        this.userInfo.submitted = true;
-      });
+      // this.$axios.post(url, this.userInfo).then(function (response) {
+      //   console.log(response);
+      //   this.userInfo.submitted = true;
+      // });
+
+      (async () => {
+        var item = this.userInfo;
+        var form_data = new FormData();
+
+        for (var key in item) {
+          form_data.append(key, item[key]);
+        }
+
+        const rawResponse = await fetch(
+          "https://info.eco.ca/acton/eform/42902/6594f4ab-9a87-4a75-a869-3a2a324662e0/d-ext-0001",
+          {
+            method: "POST",
+            headers: {
+              Accept: "multipart/form-data",
+            },
+            body: form_data,
+          }
+        );
+        const content = await rawResponse.json();
+
+        // console.log(encodeURIComponent(content));
+      })();
+
       // setTimeout(AoProcessForm(this.userInfo), 0);
     },
 
