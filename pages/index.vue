@@ -19,15 +19,7 @@
     >
       <!-- SP: INTRO -->
       <div class="row" v-if="beginQuiz == false">
-        <div
-          class="
-            col-xl-8 col-lg-9
-            mx-auto
-            d-flex
-            flex-column
-            align-items-center
-          "
-        >
+        <div class="col-xl-8 col-lg-9 mx-auto d-flex flex-column">
           <h1 class="fw-bold mb-4 w-100 h2">
             Are you ready for Project Management Essentials?
           </h1>
@@ -48,7 +40,7 @@
             class="
               btn btn-success btn-lg
               d-inline-flex
-              mx-auto
+              me-auto
               align-items-center align-self-center
             "
             @click="beginQuiz = true"
@@ -186,7 +178,7 @@
     <!-- SP: QUIZ RESULTS -->
     <section
       class="overflow-auto container-fluid py-5"
-      v-if="finishedQuiz == true && userInfo.submitted == true"
+      v-show="finishedQuiz == true && userInfo.submitted == true"
       id="resultsContainer"
     >
       <div class="row mt-5">
@@ -204,7 +196,7 @@
               role="button"
               href="https://eco.ca/blog/eco-canada-launches-a-new-project-management-training-program-with-meridus-management-inc/"
               class="btn btn-success"
-              >click here to leanr more</a
+              >click here to learn more</a
             >
           </div>
         </div>
@@ -460,174 +452,35 @@ export default {
       return chosenAns;
     },
     sendUserInfo() {
-      var aoProtocol = location.protocol;
-      if (aoProtocol.indexOf("http") < 0) aoProtocol = "http:";
-      var aoCAP = {
-        aid: "42902",
-        fid: "6594f4ab-9a87-4a75-a869-3a2a324662e0",
-        did: "d-0001",
-        server: "info.eco.ca",
-        formName: "user_info_form",
-        protocol: aoProtocol,
-      };
-      var aoArr = aoArr || [];
-      aoArr.push(aoCAP);
-      function AoProcessForm(formelement) {
-        for (let AoI = 0; AoI < aoArr.length; AoI++) {
-          if (
-            aoArr[AoI].aid &&
-            aoArr[AoI].fid &&
-            aoArr[AoI].did &&
-            aoArr[AoI].server &&
-            (aoArr[AoI].formId || aoArr[AoI].formName)
-          ) {
-            var d = document,
-              thisFormId = formelement.id || "",
-              thisFormName = formelement.name || "",
-              bi = function (i) {
-                return d.getElementById(i);
-              },
-              bn = function (i) {
-                return d.getElementsByName(i)[0];
-              },
-              names = [],
-              values = [],
-              params = {},
-              w = window,
-              targetIdOrName = aoArr[AoI].formName
-                ? bn(aoArr[AoI].formName)
-                : bi(aoArr[AoI].formId),
-              len = targetIdOrName.elements.length,
-              isLoaded = false,
-              ud = "undefined",
-              st = function (f, i) {
-                w.setTimeout(f, i);
-              },
-              ce = function (t) {
-                return d.createElement(t);
-              },
-              gid = function (p) {
-                var j,
-                  i = 0,
-                  n = Math.random,
-                  r = [],
-                  c = "0123456789abcdef".split("");
-                for (; i < 16; i++) r[i] = c[(0 | (n() * 16)) & 0xf];
-                j = p + r.join("");
-                return bi(j) == null ? j : gid(p);
-              },
-              addInput = function (form, name, value) {
-                var el = ce("input");
-                el.name = name;
-                el.value = value;
-                form.appendChild(el);
-              },
-              idifr = gid("aoCapT");
-
-            if (
-              aoArr[AoI].formName == thisFormName ||
-              aoArr[AoI].formId == thisFormId
-            ) {
-              var dTarget = ce("div");
-              dTarget.style.display = "none";
-              d.body.appendChild(dTarget);
-              dTarget.innerHTML =
-                '<iframe name="' + idifr + '" id="' + idifr + '"></iframe>'; // generate iframe
-
-              var dForm = ce("form"),
-                idform = gid("aoCapD");
-              dForm.id = idform;
-              dForm.style.display = "none";
-              dForm.method = "POST";
-              dForm.enctype = "multipart/form-data";
-              dForm.acceptCharset = "UTF-8";
-              dForm.target = idifr; // form targets iframe
-              dForm.action =
-                (aoCAP.protocol || w.location.protocol) +
-                "//" +
-                aoCAP.server +
-                "/acton/forms/userSubmit.jsp";
-              d.body.appendChild(dForm); // generate form
-
-              for (i = 0; i < len; i++) {
-                var el = targetIdOrName.elements[i];
-                var name = typeof el.name != ud ? el.name : null;
-                var value = typeof el.value != ud ? el.value : null;
-                tagName = el.nodeName.toLowerCase();
-                if (
-                  tagName == "input" &&
-                  (el.type == "radio" || el.type == "checkbox") &&
-                  !el.checked
-                ) {
-                  name = null;
-                } else if (
-                  tagName == "select" &&
-                  el.selectedIndex &&
-                  el.selectedIndex != -1 &&
-                  el.options[el.selectedIndex] &&
-                  el.options[el.selectedIndex].value
-                ) {
-                  value = el.options[el.selectedIndex].value;
-                }
-                if (name != null && name != "") {
-                  names.push(name);
-                  values.push(el.value);
-                  console.log(
-                    "Element name: " + el.name + " / Element value: " + el.value
-                  );
-                  params[name] = el.value;
-                }
-                addInput(dForm, el.name, el.value);
-              }
-
-              aoCAP.pid = 0;
-              aoCAP.cuid = aoCAP.cuid || "";
-              aoCAP.srcid = aoCAP.srcid || "";
-              aoCAP.camp = aoCAP.camp || "";
-              addInput(dForm, "ao_a", aoArr[AoI].aid);
-              addInput(dForm, "ao_f", aoArr[AoI].fid);
-              addInput(dForm, "ao_d", aoArr[AoI].fid + ":" + aoArr[AoI].did);
-              addInput(dForm, "ao_p", 0);
-              addInput(dForm, "ao_jstzo", new Date().getTimezoneOffset());
-              addInput(dForm, "ao_form_neg_cap", "");
-              addInput(dForm, "ao_refurl", d.referrer);
-              addInput(dForm, "ao_cuid", aoCAP.cuid);
-              addInput(dForm, "ao_srcid", aoCAP.srcid);
-              addInput(dForm, "ao_camp", aoCAP.camp);
-              bi(idform).submit();
-
-              var dTargetFrame = bi(idifr);
-              dTargetFrame.onload = function () {
-                isLoaded = true;
-              };
-              var waitForSubmit = function () {
-                this.count = "";
-                if (!(isLoaded || dTargetFrame.readyState == "complete")) {
-                  st(waitForSubmit, 200);
-                  this.count++;
-                } else if (this.count > 7) {
-                  return true;
-                  console.log("skipping dForm");
-                } else {
-                  d.body.removeChild(dForm);
-                  d.body.removeChild(dTarget);
-                }
-              };
-              st(waitForSubmit, 100);
-            }
-          } else {
-            console.log("aoCAP property missing");
-          }
-        }
-      }
-
       var url =
         "https://info.eco.ca/acton/eform/42902/6594f4ab-9a87-4a75-a869-3a2a324662e0/d-ext-0001";
+
       // this.$axios.post(url, this.userInfo).then(function (response) {
       //   console.log(response);
+      //   this.userInfo.submitted = true;
       // });
-      setTimeout(AoProcessForm(this.userInfo), 0);
-      this.userInfo.submitted = true;
+
+      (async () => {
+        var item = this.userInfo;
+        var form_data = new FormData();
+
+        for (var key in item) {
+          form_data.append(key, item[key]);
+        }
+
+        const rawResponse = await fetch(
+          "https://info.eco.ca/acton/eform/42902/6594f4ab-9a87-4a75-a869-3a2a324662e0/d-ext-0001",
+          {
+            method: "POST",
+            headers: {
+              Accept: "multipart/form-data",
+            },
+            body: form_data,
+          }
+        );
+        this.userInfo.submitted = true;
+        const content = await rawResponse;
+      })();
     },
 
     toggleDebug() {
