@@ -98,7 +98,7 @@
     </section>
     <section
       id="user_info"
-      v-if="finishedQuiz == true && userInfo.submitted == false"
+      v-if="finishedQuiz == true && submitted == false"
       class="container d-flex flex-column justify-content-center p-5"
     >
       <div class="row">
@@ -178,7 +178,7 @@
     <!-- SP: QUIZ RESULTS -->
     <section
       class="overflow-auto container-fluid py-5"
-      v-show="finishedQuiz == true && userInfo.submitted == true"
+      v-show="finishedQuiz == true && submitted == true"
       id="resultsContainer"
     >
       <div class="row mt-5">
@@ -354,8 +354,8 @@ export default {
         last_name: "",
         email: "",
         phone: "",
-        submitted: false,
       },
+      submitted: false,
       alphabet: [
         "a",
         "b",
@@ -457,9 +457,9 @@ export default {
 
       // this.$axios.post(url, this.userInfo).then(function (response) {
       //   console.log(response);
-      //   this.userInfo.submitted = true;
+      //   this.submitted = true;
       // });
-
+      let vm = this;
       (async () => {
         var item = this.userInfo;
         var form_data = new FormData();
@@ -478,8 +478,8 @@ export default {
             body: form_data,
           }
         );
-        this.userInfo.submitted = true;
-        const content = await rawResponse;
+        vm.submitted = true;
+        // const content = await rawResponse;
       })();
     },
 
