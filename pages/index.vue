@@ -204,7 +204,7 @@
               role="button"
               href="https://eco.ca/blog/eco-canada-launches-a-new-project-management-training-program-with-meridus-management-inc/"
               class="btn btn-success"
-              >click here to leanr more</a
+              >click here to learn more</a
             >
           </div>
         </div>
@@ -623,11 +623,11 @@ export default {
 
       var url =
         "https://info.eco.ca/acton/eform/42902/6594f4ab-9a87-4a75-a869-3a2a324662e0/d-ext-0001";
-      // this.$axios.post(url, this.userInfo).then(function (response) {
-      //   console.log(response);
-      // });
-      setTimeout(AoProcessForm(this.userInfo), 0);
-      this.userInfo.submitted = true;
+      this.$axios.post(url, this.userInfo).then(function (response) {
+        console.log(response);
+        this.userInfo.submitted = true;
+      });
+      // setTimeout(AoProcessForm(this.userInfo), 0);
     },
 
     toggleDebug() {
