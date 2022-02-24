@@ -111,7 +111,7 @@
     >
       <div class="row">
         <div class="col-xl-8 col-lg-9 mx-auto text-center">
-          <h2 class="fw-bold">Thank you for taking the quiz!</h2>
+          <h2 class="fw-bold">Thank you for taking the quiz</h2>
           <p>
             To complete the quiz and view your results, please fill in the
             following fields:
@@ -119,7 +119,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-xl-8 col-lg-9 mx-auto">
+        <div class="col-xl-6 col-lg-7 mx-auto">
           <form
             id="user_info_form"
             name="user_info_form"
@@ -199,12 +199,13 @@
             <div class="bg-light p-5 mt-5" v-if="score.length > 0">
               The Project Management Essentials course would be a great
               opportunity to level up your skills. To learn more,
-              <a
-                href="https://eco.ca/blog/eco-canada-launches-a-new-project-management-training-program-with-meridus-management-inc/"
-                class="text-success text-link"
-                >click here</a
-              >
             </div>
+            <a
+              role="button"
+              href="https://eco.ca/blog/eco-canada-launches-a-new-project-management-training-program-with-meridus-management-inc/"
+              class="btn btn-success"
+              >click here to leanr more</a
+            >
           </div>
         </div>
       </div>
