@@ -19,15 +19,7 @@
     >
       <!-- SP: INTRO -->
       <div class="row" v-if="beginQuiz == false">
-        <div
-          class="
-            col-xl-8 col-lg-9
-            mx-auto
-            d-flex
-            flex-column
-            align-items-center
-          "
-        >
+        <div class="col-xl-8 col-lg-9 mx-auto d-flex flex-column">
           <h1 class="fw-bold mb-4 w-100 h2">
             Are you ready for Project Management Essentials?
           </h1>
@@ -48,7 +40,7 @@
             class="
               btn btn-success btn-lg
               d-inline-flex
-              mx-auto
+              me-auto
               align-items-center align-self-center
             "
             @click="beginQuiz = true"
@@ -186,7 +178,7 @@
     <!-- SP: QUIZ RESULTS -->
     <section
       class="overflow-auto container-fluid py-5"
-      v-if="finishedQuiz == true && userInfo.submitted == true"
+      v-show="finishedQuiz == true && userInfo.submitted == true"
       id="resultsContainer"
     >
       <div class="row mt-5">
@@ -486,8 +478,8 @@ export default {
             body: form_data,
           }
         );
-        const content = await rawResponse;
         this.userInfo.submitted = true;
+        const content = await rawResponse;
       })();
     },
 
